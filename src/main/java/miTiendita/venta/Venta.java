@@ -7,7 +7,7 @@ import java.util.*;
 public class Venta {
     int diaSemana;
     boolean terceraEdad;
-    List<LineaDeDetalle> ld = new ArrayList<LineaDeDetalle>();
+    List<LineaDeDetalle> ld = new ArrayList<>();
     IDesctoStrategy IDescto;
 
     public Venta(int diaSemana, boolean terceraEdad)
@@ -18,6 +18,7 @@ public class Venta {
         addDescto();
     }
 
+
     public void addProducto(Producto p, double ctd)
     {
         ld.add(new LineaDeDetalle(p,ctd));
@@ -25,11 +26,40 @@ public class Venta {
 
     public void addDescto()
     {
-        IDescto = new SinDescuento();
+        if(diaSemana==1){
+            IDescto = new AdultoMayor();
+        }
+        if(diaSemana==2){
+            IDescto = new SinDescuento();
+        }
+        if(diaSemana==3){
+            IDescto = new MenonitaDescuento();
+        }
+        if(diaSemana==4){
+            IDescto = new FrutaDescuento();
+        }
+        if(diaSemana==5){
+            IDescto = new EmbutidosLacteos();
+        }
+        if(diaSemana==6){
+            IDescto = new SinDescuento();
+        }
+        if(diaSemana==7){
+            IDescto = new AdultoMayor();
+        }
     }
 
     public double getTotal()
     {
-        return 0;
+        double total = 0;
+        for (LineaDeDetalle a :
+                this.getLd()) {
+            total += (a.getCtd() * a.getP().getPunit());
+        }
+        return (total- IDescto.getDescto(this)) + .16*(total- IDescto.getDescto(this));
+    }
+
+    public List<LineaDeDetalle> getLd() {
+        return ld;
     }
 }
